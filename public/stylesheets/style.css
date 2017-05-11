@@ -599,8 +599,8 @@ nav li a
     height: 60px;
     transition: 0.5s;
     text-align: center;
-    background-color: #25C38E;
-    box-shadow: inset 0 -4px #20b581;
+    background-color: #0086FF;
+    box-shadow: inset 0 -4px #0086FF;
 }
 
 .logo:hover
