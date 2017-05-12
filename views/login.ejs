@@ -4,9 +4,45 @@
 </head>
 <body ng-controller="<%= pageController %>">
 	<% include header %>
-    <h1><%= title %></h1>
-    <p>Veuillez vous identifier pour continuer</p>
-    FORM
-	<% include footer %>
-</body>
-</html>
+	<div class="title"></div>
+	<div class="subtitle">
+		<div class="container">
+			<h2>Login here</h2>
+		</div>
+	</div>
+	<div class="container">
+		<% if (locals.error) { %>
+		<div class="alert">
+			<ul>
+					<li>
+						<i class="fa fa-exclamation"></i>
+					</li>
+			</ul>
+		</div>
+		<% } %>
+	<form action="" method="post" class="form">
+		<div class="form-group">
+			<label for="identifiant">Votre identifiant</label>
+			<input type="text" name="user_name" placeholder="Username" class="form-control" value=""/>
+		</div>
+		<div class="form-group">
+			<label for="password">Votre mot de passe</label>
+			<input type="password" name="user_password" placeholder="Password" class="form-control" value=""/>
+		</div>
+		<div class="form-group">
+			<button type="submit" name="submit" class="btn">
+				<i class="fa fa-user"></i>
+				Log in
+			</button>
+		</div>
+	</form>
+	<div class="link-forgot-my-password">
+		<a href="">I forgot my password</a>
+	</div>
+	<div class="register-box">
+		<h2>No account yet ?</h2>
+		<a href="">Register</a>
+	</div>
+	</div>
+	</div>
+<% include footer %>

@@ -4,12 +4,48 @@
 </head>
 <body ng-controller="<%= pageController %>">
 	<% include header %>
-    <h1><%= title %></h1>
-    <p>Rentrez vos données personnelles pour continuer.</p>
-    <form method="post" action="/post.html">
-    p1=<input type="text" name="p1">
-    <input type="submit" value="post">
-  	</form>
+	<div class="title"></div>
+	<div class="subtitle">
+		<div class="container">
+		<h3>Register here</h3>
+		</div>
+	</div>
+	<div class="container">
+		<% if (locals.error) { %>
+		<div class="alert">
+			<ul>
+					<li>
+						<i class="fa fa-exclamation"></i>
+					</li>
+			</ul>
+		</div>
+		<% } %>
+		<form action="" method="post" class="form">
+			<div class="form-group">
+				<label for="identifiant">Username</label>
+				<input type="text" name="name" class="form-control" value="">
+			</div>
+			<div class="form-group">
+				<label for="identifiant">E-mail address</label>
+				<input type="text" name="email" class="form-control" value="">
+			</div>
+			<div class="form-group">
+				<label for="password">Choose a password</label>
+				<input type="password" name="password" class="form-control" value="">
+			</div>
+			<div class="form-group">
+				<label for="confirm-password">Please confirm password</label>
+				<input type="password" name="confirm_password" class="form-control" value="">
+			</div>
+			<div class="form-group">
+				<button type="submit" name="submit" class="btn">
+					<i class="fa fa-user"></i>
+					Register
+				</button>
+			</div>
+			<p><a style="color:blue;" href="">I already have an account</a></p>
+		</form>
+	</div>
 	<% include footer %>
 </body>
 </html>
