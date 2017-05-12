@@ -1,0 +1,15 @@
+<html ng-app="matcha">
+<head>
+	<% include head %>
+</head>
+<body ng-controller="<%= pageController %>">
+	<% include header %>
+    <h1><%= title %></h1>
+    <p>Rentrez vos données personnelles pour continuer.</p>
+    <form method="post" action="/post.html">
+    p1=<input type="text" name="p1">
+    <input type="submit" value="post">
+  	</form>
+	<% include footer %>
+</body>
+</html>
