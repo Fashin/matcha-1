@@ -16,3 +16,6 @@ matcha.controller('IndexController', function IndexController($scope) {
     }
   ];
 });
+
+matcha.controller('RegisterController', function RegisterController($scope) {
+});

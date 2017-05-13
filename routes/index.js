@@ -1,5 +1,6 @@
-let express = require('express');
-let router = express.Router();
+let express	= require('express');
+let router	= express.Router();
+var user	= require('../models/user.js');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -15,8 +16,12 @@ router.get('/register', function(req, res, next) {
 });
 
 router.post('/register', function(req, res, next) {
-	console.log(req.body);
-	res.render('register', { title: 'Register', pageController: "RegisterController" });
+	if (req.body.submit === "reg") {
+		user.create(req.body);
+	} else {
+		req.flash('error', "Vous n'avez pas posté de message");
+		res.redirect('/register');
+	}
 });
 
 module.exports = router;
