@@ -1,12 +1,5 @@
-let mysql = require('mysql');
+var MongoClient = require('mongodb').MongoClient;
 
-let connect = mysql.createConnection({
-	host	: 'localhost',
-	user	: 'root',
-	passwd	: 'root',
-	db		: 'tuto'
-});
+var connection = MongoClient.connect('mongodb://localhost:27017/database');
 
-connect.connect()
-
-module.exports = connect
+module.exports = connection

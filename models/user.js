@@ -1,14 +1,13 @@
-let connect = require('../config/db')
+var MongoClient = require('mongodb').MongoClient;
 
 class	User {
 
-	static create (content, cb) {
-		console.log(content);
-		// connect.query('INSERT INTO users SET content = ?, created_at = ?', [content, new Date()], (err, result) => {
-        // 	if (err) throw err
-        // 		cb(result)
-     //  	})
-    }
+	static create (content) {
+		MongoClient.connect("mongodb://localhost/database", function(error, db) {
+			if (error) throw error;
+			db.collection("users").insert(content);
+		});
+	}
 }
 
 module.exports = User

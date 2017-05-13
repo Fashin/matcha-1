@@ -1,5 +1,5 @@
 // Define the `matcha` module
-var matcha = angular.module('matcha', []);
+let matcha = angular.module('matcha', []);
 
 // Define the `IndexController` controller on the `matcha` module
 matcha.controller('IndexController', function IndexController($scope) {
