@@ -11,9 +11,11 @@
     "debug": "~2.6.3",
     "ejs": "~2.5.6",
     "express": "~4.15.2",
+    "mongodb": "^2.2.26",
     "morgan": "~1.8.1",
     "mysql": "^2.13.0",
     "nodemon": "^1.11.0",
-    "serve-favicon": "~2.4.2"
+    "serve-favicon": "~2.4.2",
+    "session-file-store": "^1.0.0"
   }
 }

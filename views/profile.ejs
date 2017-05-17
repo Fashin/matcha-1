@@ -1,0 +1,56 @@
+<html ng-app="matcha">
+<head>
+	<% include head %>
+</head>
+<body ng-controller="<%= pageController %>">
+	<% include header %>
+	<div class="title"></div>
+	<div class="subtitle">
+		<div class="container">
+		<h3>My profile</h3>
+		</div>
+	</div>
+	<div class="container">
+		<% if (locals.error) { %>
+		<div class="alert">
+			<ul>
+					<li>
+						<i class="fa fa-exclamation"></i>
+					</li>
+			</ul>
+		</div>
+		<% } %>
+		<form action="register" method="post" class="form">
+			<div class="form-group">
+				<label for="identifiant">Âge</label>
+				<input type="text" name="age" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="identifiant">Sexe</label>
+				<input type="text" name="gender" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="identifiant">Orientation</label>
+				<input type="text" name="sexuality" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="identifiant">Bio</label>
+				<input type="text" name="bio" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="identifiant">Centres d'intérêts</label>
+				<input type="text" name="interest" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="identifiant">Photos</label>
+				<input type="text" name="photos" class="form-control">
+			</div>
+			<div class="form-group">
+				<button type="submit" name="submit" value="reg" class="btn">
+					<i class="fa fa-user"></i>
+					Enregistrer les modifications
+				</button>
+			</div>
+		</form>
+	</div>
+<% include footer %>

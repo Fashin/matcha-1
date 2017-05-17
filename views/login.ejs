@@ -1,6 +1,7 @@
-<html ng-app="matcha">
+<html ng-app="login">
 <head>
 	<% include head %>
+	<script src="/js/controllers/loginController.js"></script>
 </head>
 <body ng-controller="<%= pageController %>">
 	<% include header %>
@@ -10,27 +11,25 @@
 			<h2>Login here</h2>
 		</div>
 	</div>
-	<div class="container">
-		<% if (locals.error) { %>
-		<div class="alert">
+	<div class="container" >
+		<div class="notif" style="display:none">
 			<ul>
 					<li>
 						<i class="fa fa-exclamation"></i>
 					</li>
 			</ul>
 		</div>
-		<% } %>
-	<form action="login" method="post" class="form">
+	<form method="post" class="form">
 		<div class="form-group">
 			<label for="identifiant">Votre identifiant</label>
-			<input type="text" name="user_name" placeholder="Username" class="form-control" value=""/>
+			<input ng-model="username" type="text" name="user_name" placeholder="Username" class="form-control" value=""/>
 		</div>
 		<div class="form-group">
 			<label for="password">Votre mot de passe</label>
-			<input type="password" name="user_password" placeholder="Password" class="form-control" value=""/>
+			<input ng-model="password" type="password" name="user_password" placeholder="Password" class="form-control" value=""/>
 		</div>
 		<div class="form-group">
-			<button type="submit" name="submit" class="btn">
+			<button type="submit" name="submit" class="btn" ng-click="login()">
 				<i class="fa fa-user"></i>
 				Log in
 			</button>
