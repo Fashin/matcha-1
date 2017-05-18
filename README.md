@@ -6,10 +6,10 @@ I choose to use NodeJS with the framework Express and mongodb.
 
 you need to clone and install mongodb then
 
-```npm i --save express```
-```npm i --save express-session```
-```mkdir db```
-```/usr/local/mongodb/bin/mongod --dbpath /Users/hmassonn/http/MyWebSite/matcha/db```
+<pre>```npm i --save express```<pre>
+<pre>```npm i --save express-session```<pre>
+<pre>```mkdir db```<pre>
+<pre>```/usr/local/mongodb/bin/mongod --dbpath /Users/hmassonn/http/MyWebSite/matcha/db```<pre>
 
 then open a new shell and use:
 
