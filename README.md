@@ -11,7 +11,7 @@ npm i --save express-session
 mkdir db
 /usr/local/mongodb/bin/mongod --dbpath /Users/hmassonn/http/MyWebSite/matcha/db</pre>
 
-then open a new shell and use:
+then **open a new shell** and use:
 
 ```npm start```
 
