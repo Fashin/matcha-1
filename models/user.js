@@ -1,4 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
+var	tab = [];
 
 class	User {
 
@@ -14,6 +15,17 @@ class	User {
 			if (error) throw error;
 			db.collection("users").update({_id: id}, {$set: {content}})
 		});
+	}
+
+	static verif(content, cb) {
+		MongoClient.connect("mongodb://localhost/database", function(error, db) {
+			if (error) throw error
+			// console.log(content)
+			db.collection("users").find({ userName : content['username'], Password : content['password'] }).toArray(function(err, items) {
+				// console.log(items);
+				cb(items);
+			})
+		})
 	}
 }
 

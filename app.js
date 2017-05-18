@@ -28,9 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session);
 app.use('/', routes);
 
-// app.use(require(./middlewares/flash){
-
-// })
+// app.use(require('./middlewares/flash'))
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

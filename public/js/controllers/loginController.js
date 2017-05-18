@@ -8,9 +8,7 @@ loginModule.controller('LoginController', ['$http', '$scope', function ($http, $
 		$http.post('/api/login', {'username':$scope.username, 'password': $scope.password}).then(
 			function(response) {
 				console.log(response);
-				//blah
-				//res.send  dans response // le mmessage d'erreur
-				// crée avec les directives.
-			});
+			}
+		);
 	}
 }]);
