@@ -6,6 +6,7 @@ const path = require('path');
 const mysql = require('mysql');
 
 var targets = [];
+var flash = { error: "", notice: "" };
 
 //SQL
 
@@ -60,6 +61,7 @@ app.get('/users/:id', function(req, res) {
 });
 
 app.get('/', function(req, res) {
+	console.log(flash);
     res.render('index');
 });
 
@@ -78,7 +80,6 @@ app.post('/register', function(req, res){
         interests: req.body.user_tags,
         photos: req.body.user_pics
     };
-    connection.connect();
     connection.query('INSERT INTO users SET ?', newUser, function (error, results, fields) {
         if (error) throw error;
 		console.log(results);
@@ -89,26 +90,29 @@ app.post('/register', function(req, res){
         else
             res.status(500).send("Nous n'avons pas pu vous inscrire, ce n'est pas vous c'est nous, nous sommes désolés :(");
     });
-    connection.end();
 });
 
 app.post('/connection', function(req, res){
-    const newUser = {
+	console.log(flash);
+    var User = {
 		login: req.body.user_login,
         password: req.body.password
     };
-    connection.connect();
-    connection.query('SELECT ? FROM users', newUser, function (error, results, fields) {
+    connection.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
         if (error) throw error;
-		if (results.RowDataPacket) {
-            req.session.login = newUser.login;
-            res.status(201).send("Vous êtes bien connecté");
+		if (results[0] && results[0].login) {
+			if (results[0].password == User.password) {
+				flash.notice = "bienvenu " + User.login;
+				return (res.redirect("/"));
+			} else {
+				flash.error = "mauvais mot de passe";
+				return (res.redirect("/connection"));
+			}
+		} else {
+			flash.error = "mauvais login";
+			return (res.redirect("/connection"));
 		}
-        else
-            res.status(500).send("Vous ne pouvez pas vous connecter");
-		// console.log(results.RowDataPacket);
     });
-    connection.end();
 });
 
 // Création d'un nouveau serveur
