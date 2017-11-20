@@ -101,6 +101,10 @@ var io = require('socket.io').listen(server);
 
 // Connexion, déconnexion, envoi de messages
 io.on('connection', function (socket) {
+    /**
+     * Utilisateur connecté à la socket
+     */
+    var loggedUser;
 
     /**
      * Log de connexion et de déconnexion des utilisateurs

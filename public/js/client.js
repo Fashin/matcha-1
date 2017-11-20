@@ -15,8 +15,17 @@ $('form').submit(function(e) {
 });
 
 /**
+ * Connexion d'un utilisateur via le formulaire
+ */
+socket.on('user-login', function (loggedUser) {
+    console.log('user logged in : ' + loggedUser.username);
+    user = loggedUser;
+});
+
+/**
  * Réception d'un message
  */
 socket.on('chat-message', function (message) {
     $('#messages').append($('<li>').text(message.text));
 });
+
