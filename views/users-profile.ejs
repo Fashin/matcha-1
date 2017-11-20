@@ -23,6 +23,9 @@
                             </div>
                             <div class="card-content">
                                 <p><%= user.first_name %> <%= user.name %>, <%= user.age %> ans</p>
+                                <p><%= user.gender %> aimant les <%= user.preferences %></p>
+                                <p>À propos de moi</p>
+                                <p></p>
                             </div>
                             <div class="card-action">
                                 <a href="../chat">Envoyer un message</a>
@@ -31,6 +34,14 @@
                     </div>
                 </div>
             <% }%>
+
+            `age` int(11) DEFAULT NULL,
+            `gender` varchar(255) NOT NULL,
+            `preferences` varchar(255) NOT NULL,
+            `bio` varchar(255) NOT NULL,
+            `interests` varchar(255) NOT NULL,
+            `photos` varchar(255) NOT NULL,
+            PRIMARY KEY (`id`)
 
         </div>
 
