@@ -1,0 +1,28 @@
+{
+  "name": "matcha",
+  "version": "1.0.0",
+  "description": "project matcha for 42",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "vogsphere@vogsphere.42.fr:intra/2017/activities/matcha/mjeannin"
+  },
+  "author": "mjeannin",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.15.4",
+    "multer": "^1.3.0",
+    "mysql": "^2.14.1",
+    "socket.io": "^2.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Chat</title>
+        <link rel="stylesheet" href="/css/styles.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+        <% include ./partials/header.ejs %>
+        <h1>Chat</h1>
+
+        <p><input type="button" value="Envoyer un message au serveur" id="poke" /></p>
+
+        <% include ./partials/footer.ejs %>
+
+        <script src="/js/socket.io.js"></script>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script>
+            var socket = io.connect('localhost:3001');
+            socket.on('connect', function() {
+                console.log('Connected!');
+            });
+            socket.on('event', function(data){
+                console.log('Event');
+            });
+            socket.on('disconnect', function(){
+                console.log('Disconnect');
+            });
+            socket.on('message', function(message) {
+                alert('Le serveur a un message pour vous : ' + message);
+            })
+            $('#poke').click(function () {
+                socket.emit('message', 'Salut serveur, ça va ?');
+            })
+        </script>
+    </body>
+</html>
