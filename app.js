@@ -27,13 +27,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
 	secret: 'keyboard cat',
 	cookie: { maxAge: 60000 },
-	resave: false,
+	resave: true,
 	saveUninitialized: true
 }));
-app.use(function (req, res, next) {
-	req.session.user = { login: "" };
-	next();
-});
+
 // SET
 
 app.set('views', './views');
@@ -76,6 +73,7 @@ app.get('/users/:login', function(req, res) {
 });
 
 app.get('/', function(req, res) {
+	console.log("/index");
 	console.log(flash);
 	console.log(req.session);
     res.render('index');
@@ -109,7 +107,8 @@ app.post('/register', function(req, res){
 });
 
 app.post('/connection', function(req, res){
-	console.log(flash);
+	console.log("/connection");
+	console.log(req.body);
     var User = {
 		login: req.body.user_login,
         password: req.body.password
@@ -119,9 +118,13 @@ app.post('/connection', function(req, res){
 		if (results[0] && results[0].login) {
 			if (results[0].password == User.password) {
 				flash.notice = "bienvenu " + User.login;
-				// res.session.user.login = User.login;
-				// console.log(res.session);
-				return (res.redirect("/"));
+				req.session.login = User.login;
+				console.log(req.session.user);
+				req.session.save(function(err) {
+					if (err) return next(err);
+					console.log(req.session.user);
+					return (res.redirect('/'));
+				})
 			} else {
 				flash.error = "mauvais mot de passe";
 				return (res.redirect("/connection"));
