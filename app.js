@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
     user     : 'root',
     password : 'qwerty',
     database : 'matcha',
-    port     : 8080
+    port     : 3306
 });
 
 // USE
@@ -68,6 +68,7 @@ app.get('/', function(req, res) {
 app.post('/register', function(req, res){
     const newUser = {
 		login: req.body.login,
+		password: req.body.password,
         name: req.body.user_name,
         first_name: req.body.user_fname,
         age: req.body.user_age,
@@ -80,13 +81,32 @@ app.post('/register', function(req, res){
     connection.connect();
     connection.query('INSERT INTO users SET ?', newUser, function (error, results, fields) {
         if (error) throw error;
+		console.log(results);
         if (results.rowsAffected == 1) {
             req.session.login = newUser.login;
             res.status(201).send("Vous êtes bien enregistré");
-
         }
         else
-            res.status(500).send("Nous n'avons pas pu vous inscrire, ce n'est pas vous c'est nous, nous sommes désolés :(")
+            res.status(500).send("Nous n'avons pas pu vous inscrire, ce n'est pas vous c'est nous, nous sommes désolés :(");
+    });
+    connection.end();
+});
+
+app.post('/connection', function(req, res){
+    const newUser = {
+		login: req.body.user_login,
+        password: req.body.password
+    };
+    connection.connect();
+    connection.query('SELECT ? FROM users', newUser, function (error, results, fields) {
+        if (error) throw error;
+		if (results.RowDataPacket) {
+            req.session.login = newUser.login;
+            res.status(201).send("Vous êtes bien connecté");
+		}
+        else
+            res.status(500).send("Vous ne pouvez pas vous connecter");
+		// console.log(results.RowDataPacket);
     });
     connection.end();
 });
