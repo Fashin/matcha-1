@@ -93,16 +93,27 @@ app.post('/register', function(req, res){
 // Création d'un nouveau serveur
 var server = http.createServer(app);
 
+var io = require('socket.io')(http);
+
 // Chargement de socket.io
 var io = require('socket.io').listen(server);
 
-// Quand un client se connecte, on le note dans la console et on en informe le client
+// Connexion, déconnexion, envoi de messages
 io.on('connection', function (socket) {
-    console.log('Un client est connecté !');
-    socket.emit('message', 'Vous êtes bien connecté !');
-    // Quand le serveur reçoit un signal de type "message" du client
-    socket.on('message', function (message) {
-        console.log('Un client me parle ! Il me dit : ' + message);
+
+    /**
+     * Log de connexion et de déconnexion des utilisateurs
+     */
+    console.log('a user connected');
+    socket.on('disconnect', function () {
+        console.log('user disconected');
+    });
+
+    /**
+     * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
+     */
+    socket.on('chat-message', function (message) {
+        io.emit('chat-message', message);
     });
 });
 
