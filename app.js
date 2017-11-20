@@ -14,7 +14,7 @@ var connection = mysql.createConnection({
     user     : 'root',
     password : 'qwerty',
     database : 'matcha',
-    port     : 3307
+    port     : 8080
 });
 
 // USE
@@ -48,7 +48,7 @@ app.get('/users', function(req, res) {
     res.render('users', { users: targets });
 });
 
-app.get('/users/connection', function(req, res) {
+app.get('/connection', function(req, res) {
     res.render('connection');
 });
 
@@ -67,6 +67,7 @@ app.get('/', function(req, res) {
 
 app.post('/register', function(req, res){
     const newUser = {
+		login: req.body.login,
         name: req.body.user_name,
         first_name: req.body.user_fname,
         age: req.body.user_age,

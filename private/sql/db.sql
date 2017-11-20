@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
+  `login` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `first_name` varchar(255) NOT NULL,
   `age` int(11) DEFAULT NULL,
@@ -46,9 +47,9 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `login`, `name`, `first_name`, `age`, `gender`, `preferences`, `bio`, `interests`, `photos`) VALUES
 (1, '', 'Gislaine', '', 64, '', '', '', '', ''),
-(2, '', 'Christophe', 'Damien', 25, 'M', 'F', 'I\'m a good developer', 'funny dogs', 'N/A'),
-(3, '', 'Jeannin', 'Marine', 22, 'F', 'MF', 'I\'m a great journalist :)', 'news', 'N/A'),
-(4, '', 'Robert', 'Ophélie', 23, 'F', 'M', 'je bosse à Renault', 'handball', 'N/A');
+(2, 'Dam', 'Christophe', 'Damien', 25, 'M', 'F', 'I\'m a good developer', 'funny dogs', 'N/A'),
+(3, 'Marine', 'Jeannin', 'Marine', 22, 'F', 'MF', 'I\'m a great journalist :)', 'news', 'N/A'),
+(4, 'Roberto Carlos', 'Robert', 'Ophélie', 23, 'F', 'M', 'je bosse à Renault', 'handball', 'N/A');
 
 --
 -- Indexes for dumped tables
