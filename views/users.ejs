@@ -5,6 +5,7 @@
         <title>Accueil</title>
         <link rel="stylesheet" href="/css/styles.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
         <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
@@ -12,27 +13,29 @@
     <body>
         <% include ./partials/header.ejs %>
 
-        <h3>Et voici la liste de toutes ces MILF super chaudes.</h3>
+        <div class="page_title">Utilisateurs</div>
 
-        <div>
-            <ul>
-                <li><a href="#"><img src="/img/pic_cosma.jpg" /></a></li>
-                <li><a href="#"><img src="/img/pic_damien.jpg" /></a></li>
-                <li><a href="#"><img src="/img/pic_dorian.jpg" /></a></li>
-                <li><a href="#"><img src="/img/pic_elise.jpg" /></a></li>
-                <li><a href="#"><img src="/img/pic_fanny.jpg" /></a></li>
-                <li><a href="#"><img src="/img/pic_jb.jpg" /></a></li>
-                <li><a href="#"><img src="/img/pic_manon.jpg" /></a></li>
-                <li><a href="#"><img src="/img/pic_ophe.jpg" /></a></li>
-                <li><a href="#"><img src="/img/pic_thanh.jpg" /></a></li>
-            </ul>
+        <div class="container">
+                <div class="row">
+                    <% for(user of users){ %>
+                        <div class="col s4">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="/img/pic_dorian.jpg">
+                                    <span class="card-title"><%= user.login %></span>
+                                </div>
+                                <div class="card-content">
+                                    <p><%= user.first_name %>, <%= user.age %> ans</p>
+                                </div>
+                                <div class="card-action">
+                                    <a href="users/<%= user.login %>">Voir le profil</a>
+                                </div>
+                            </div>
+                        </div>
+                    <% }%>
+                </div>
+            </div>
         </div>
-
-        <!--<div class="users">-->
-            <!--<% for(user of users){ %>-->
-                <!--<div><%= user.name %>, <%= user.age %> ans</div>-->
-            <!--<% }%>-->
-        <!--</div>-->
 
         <% include ./partials/footer.ejs %>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>

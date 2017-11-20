@@ -54,20 +54,25 @@ app.get('/register', function(req, res) {
 });
 
 app.get('/users', function(req, res) {
-    targets = [];
-
-    res.render('users', { users: targets });
+    connection.query('SELECT * FROM users', function (err, result, fields) {
+        if (err) throw err;
+        targets = result;
+        res.render('users', { users: targets });
+        console.log(targets);
+    });
 });
 
 app.get('/connection', function(req, res) {
     res.render('connection');
 });
 
-app.get('/users/:id', function(req, res) {
-    const id = req.params.id;
-    const age = '47';
-
-    res.render('users-profile', {user_id: id, user_age: age});
+app.get('/users/:login', function(req, res) {
+    connection.query('SELECT * FROM users WHERE login = ?', req.params.login, function (err, result, fields) {
+        if (err) throw err;
+        targets = result;
+        res.render('users-profile', { users: targets });
+        console.log(targets);
+    });
 });
 
 app.get('/', function(req, res) {
