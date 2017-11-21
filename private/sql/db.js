@@ -8,7 +8,7 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
-connection.query("DROP TABLE users;");
+connection.query("DROP TABLE IF EXISTS users;");
 
 connection.query("CREATE TABLE `users` ( \
   `id` int(11) NOT NULL AUTO_INCREMENT, \

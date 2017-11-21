@@ -7,7 +7,7 @@ const mysql = require('mysql');
 var session = require("express-session");
 
 var targets = [];
-var flash = { error: "", notice: "" };
+var flash = { error: null, notice: null };
 
 //SQL
 
@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
 	secret: 'keyboard cat',
-	cookie: { maxAge: 60000 },
+	cookie: { maxAge: 1000*60*60*24  },
 	resave: true,
 	saveUninitialized: true
 }));
@@ -39,18 +39,25 @@ app.set('view engine', 'ejs');
 // GET
 
 app.get('/chat', function(req, res) {
+	console.log("GET /chat");
     res.render('chat');
 });
 
 app.get('/myprofile', function(req, res) {
+	console.log("GET /myprofile");
     res.render("myprofile");
 });
 
 app.get('/register', function(req, res) {
-    res.render('register');
+	console.log("GET /register");
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
+    res.render('register', { login: req.session.login, flash: tmp_flash });
 });
 
 app.get('/users', function(req, res) {
+	console.log("GET /users");
     connection.query('SELECT * FROM users', function (err, result, fields) {
         if (err) throw err;
         targets = result;
@@ -60,28 +67,37 @@ app.get('/users', function(req, res) {
 });
 
 app.get('/connection', function(req, res) {
-    res.render('connection');
+	console.log("GET /connection");
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
+    res.render('connection', { login: req.session.login, flash: tmp_flash });
 });
 
 app.get('/users/:login', function(req, res) {
+	console.log("GET /users/:login");
     connection.query('SELECT * FROM users WHERE login = ?', req.params.login, function (err, result, fields) {
         if (err) throw err;
         targets = result;
         res.render('users-profile', { users: targets });
-        console.log(targets);
+		console.log(targets);
+    	flash.error = null;
+		flash.notice = null;
     });
 });
 
 app.get('/', function(req, res) {
-	console.log("/index");
-	console.log(flash);
-	console.log(req.session);
-    res.render('index');
+	console.log("GET /index");
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
+    res.render('index', { login: req.session.login, flash: tmp_flash });
 });
 
 // POST
 
-app.post('/register', function(req, res){
+app.post('/register', function(req, res) {
+	console.log("POST /register");
     const newUser = {
 		login: req.body.login,
 		password: req.body.password,
@@ -97,7 +113,7 @@ app.post('/register', function(req, res){
     connection.query('INSERT INTO users SET ?', newUser, function (error, results, fields) {
         if (error) throw error;
 		console.log(results);
-        if (results.rowsAffected == 1) {
+        if (results.affectedRows == 1) {
             req.session.login = newUser.login;
             res.status(201).send("Vous êtes bien enregistré");
         }
@@ -106,9 +122,8 @@ app.post('/register', function(req, res){
     });
 });
 
-app.post('/connection', function(req, res){
-	console.log("/connection");
-	console.log(req.body);
+app.post('/connection', function(req, res) {
+	console.log("POST /connection");
     var User = {
 		login: req.body.user_login,
         password: req.body.password
@@ -119,12 +134,10 @@ app.post('/connection', function(req, res){
 			if (results[0].password == User.password) {
 				flash.notice = "bienvenu " + User.login;
 				req.session.login = User.login;
-				console.log(req.session.user);
 				req.session.save(function(err) {
 					if (err) return next(err);
-					console.log(req.session.user);
 					return (res.redirect('/'));
-				})
+				});
 			} else {
 				flash.error = "mauvais mot de passe";
 				return (res.redirect("/connection"));
