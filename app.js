@@ -108,7 +108,7 @@ app.post('/register', function(req, res) {
         preferences: req.body.user_pref,
         bio: req.body.user_bio,
         interests: req.body.user_tags,
-        photos: req.body.user_pics
+        mail: req.body.mail
     };
     connection.query('INSERT INTO users SET ?', newUser, function (error, results, fields) {
         if (error) throw error;
