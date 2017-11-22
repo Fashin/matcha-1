@@ -16,6 +16,12 @@
         <div class="row" id="register-form">
             <form class="col s12" id="register" action="/register" method="post">
                 <div class="row">
+                    <div class="input-field col s12">
+                        <label for="mail">Email</label>
+                        <input type="text" name="mail" id="mail">
+                    </div>
+                </div>
+                <div class="row">
                     <div class="input-field col s6">
                         <label for="user_name">Nom</label>
                         <input type="text" name="user_name" id="user_name">
@@ -79,17 +85,18 @@
                     </div>
                 </div>
 
-                <div class="row">
-                        <div class="file-field input-field">
-                            <div class="btn">
-                                <span>Photos</span>
-                                <input type="file" multiple>
-                            </div>
-                            <div class="file-path-wrapper">
-                                <input name="user_pics" id="user_pics" class="file-path validate" type="text" placeholder="Upload one or more files">
-                            </div>
+                <!-- <div class="row">
+                    <div class="file-field input-field">
+                        <div class="btn">
+                            <span>Photos</span>
+							<div id="prev"></div>
+                            <input id="file" type="file" multiple>
                         </div>
-                </div>
+                        <div class="file-path-wrapper">
+                            <input name="user_pics" id="user_pics" class="file-path validate" type="text" placeholder="Upload one or more files">
+                        </div>
+                    </div>
+                </div> -->
 
                 <div class="row" id="register-button">
                     <button class="btn waves-effect waves-light" type="submit" name="submit">S'inscrire
@@ -105,5 +112,6 @@
         <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script src="/js/materialize.min.js"></script>
         <script src="/js/application.js"></script>
+        <script src="/js/register.js"></script>
     </body>
 </html>
