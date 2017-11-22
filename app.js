@@ -182,37 +182,6 @@ app.use(function(req, res, next){
   res.type('txt').send('Not found');
 });
 
-// Création d'un nouveau serveur
-var server = http.createServer(app);
-
-var io = require('socket.io')(http);
-
-// Chargement de socket.io
-var io = require('socket.io').listen(server);
-
-// Connexion, déconnexion, envoi de messages
-io.on('connection', function (socket) {
-    /**
-     * Utilisateur connecté à la socket
-     */
-    var loggedUser;
-
-    /**
-     * Log de connexion et de déconnexion des utilisateurs
-     */
-    console.log('a user connected');
-    socket.on('disconnect', function () {
-        console.log('user disconected');
-    });
-
-    /**
-     * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
-     */
-    socket.on('chat-message', function (message) {
-        io.emit('chat-message', message);
-    });
-});
-
 // LISTEN
 
 server.listen(3001);
