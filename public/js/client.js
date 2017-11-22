@@ -15,7 +15,7 @@ $('form').submit(function(e) {
 });
 
 /**
- * Connexion d'un utilisateur via le formulaire
+ * Connexion d'un utilisateur
  */
 socket.on('user-login', function (loggedUser) {
     console.log('user logged in : ' + loggedUser.username);

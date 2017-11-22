@@ -5,6 +5,7 @@ const http = require('http');
 const path = require('path');
 const mysql = require('mysql');
 var session = require("express-session");
+var sharedsession = require("express-socket.io-session");
 
 var targets = [];
 var flash = { error: null, notice: null };
@@ -152,30 +153,40 @@ app.post('/connection', function(req, res) {
 // Création d'un nouveau serveur
 var server = http.createServer(app);
 
-var io = require('socket.io')(http);
-
 // Chargement de socket.io
-var io = require('socket.io').listen(server);
+var io = require('socket.io')(server);
+
+// Partage de la session avec socket.io
+io.use(sharedsession(session, {
+    autoSave:true
+}));
 
 // Connexion, déconnexion, envoi de messages
 io.on('connection', function (socket) {
-    /**
-     * Utilisateur connecté à la socket
-     */
-    var loggedUser;
-    var username = session.login;
 
-    /**
-     * Log de connexion et de déconnexion des utilisateurs
-     */
+    //Utilisateur connecté à la socket
+    var loggedUser;
+
+    // Accept a login event with user's data
+    socket.on("login", function(userdata) {
+        socket.handshake.session.userdata = userdata;
+        socket.handshake.session.save();
+    });
+    socket.on("logout", function(userdata) {
+        if (socket.handshake.session.userdata) {
+            delete socket.handshake.session.userdata;
+            socket.handshake.session.save();
+            socket.emit('left', userdata, Date.now());
+        }
+    });
+
+    //Log de connexion et de déconnexion des utilisateurs
     console.log('a user connected');
     socket.on('disconnect', function () {
         console.log('user disconected');
     });
 
-    /**
-     * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
-     */
+    //Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
     socket.on('chat-message', function (message) {
         message.username = loggedUser.username; // On intègre ici le nom d'utilisateur au message
         io.emit('chat-message', message);
