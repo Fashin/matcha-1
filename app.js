@@ -5,6 +5,7 @@ const http = require('http');
 const path = require('path');
 const mysql = require('mysql');
 var session = require("express-session");
+var sharedsession = require("express-socket.io-session");
 
 var targets = [];
 var flash = { error: null, notice: null };
@@ -40,10 +41,14 @@ app.set('view engine', 'ejs');
 
 app.get('/chat', function(req, res) {
 	console.log("GET /chat");
+<<<<<<< HEAD
 	tmp_flash = { error: flash.error, notice: flash.notice };
 	flash.error = null;
 	flash.notice = null;
     res.render('chat', { session: req.session, flash: tmp_flash });
+=======
+    res.render('chat', { session: req.session });
+>>>>>>> master
 });
 
 app.get('/myprofile', function(req, res) {
@@ -180,6 +185,49 @@ app.use(function(req, res, next){
   }
   // default to plain-text. send()
   res.type('txt').send('Not found');
+
+// Création d'un nouveau serveur
+var server = http.createServer(app);
+
+// Chargement de socket.io
+var io = require('socket.io')(server);
+
+// Partage de la session avec socket.io
+io.use(sharedsession(session, {
+    autoSave:true
+}));
+
+// Connexion, déconnexion, envoi de messages
+io.on('connection', function (socket) {
+
+    //Utilisateur connecté à la socket
+    var loggedUser;
+
+    // Accept a login event with user's data
+    socket.on("login", function(userdata) {
+        socket.handshake.session.userdata = userdata;
+        socket.handshake.session.save();
+    });
+    socket.on("logout", function(userdata) {
+        if (socket.handshake.session.userdata) {
+            delete socket.handshake.session.userdata;
+            socket.handshake.session.save();
+            socket.emit('left', userdata, Date.now());
+        }
+    });
+
+    //Log de connexion et de déconnexion des utilisateurs
+    console.log('a user connected');
+    socket.on('disconnect', function () {
+        console.log('user disconected');
+    });
+
+    //Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
+    socket.on('chat-message', function (message) {
+        message.username = loggedUser.username; // On intègre ici le nom d'utilisateur au message
+        io.emit('chat-message', message);
+        console.log('Message de : ' + loggedUser.username);
+    });
 });
 
 // LISTEN
