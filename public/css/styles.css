@@ -52,3 +52,7 @@ ul {
 .user_profile{
     margin:7%;
 }
+
+#profile_pic{
+    width:400px;
+}

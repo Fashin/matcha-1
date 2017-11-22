@@ -18,14 +18,16 @@
                     <div class="col s12 m7">
                         <div class="card">
                             <div class="card-image">
-                                <img src="/img/pic_dorian.jpg">
+                                <img id="profile_pic" src="/img/pic_dorian.jpg">
                                 <span class="card-title"><%= user.login %></span>
                             </div>
                             <div class="card-content">
-                                <p><%= user.first_name %> <%= user.name %>, <%= user.age %> ans</p>
-                                <p><%= user.gender %> aimant les <%= user.preferences %></p>
-                                <p>À propos de moi</p>
-                                <p></p>
+                                <div><%= user.first_name %> <%= user.name %> aka <%= user.login %>, <%= user.age %> ans</div>
+                                <div>À propos de moi :
+                                    <p><%= user.gender %> <%= user.preferences %></p>
+                                </div>
+                                <p><%= user.bio %></p>
+                                <p>Centres d'intérêts : <%= user.interests %></p>
                             </div>
                             <div class="card-action">
                                 <a href="../chat">Envoyer un message</a>
@@ -35,13 +37,7 @@
                 </div>
             <% }%>
 
-            `age` int(11) DEFAULT NULL,
-            `gender` varchar(255) NOT NULL,
-            `preferences` varchar(255) NOT NULL,
-            `bio` varchar(255) NOT NULL,
-            `interests` varchar(255) NOT NULL,
-            `photos` varchar(255) NOT NULL,
-            PRIMARY KEY (`id`)
+            <!--ajouter les photos qq part-->
 
         </div>
 
