@@ -11,14 +11,16 @@
 
     <body>
         <% include ./partials/header.ejs %>
+
 		<% if (flash.error) { %>
 			<li> oh non nous avons cette erreur <%= flash.error %> </li>
 		<% } %>
 		<% if (flash.notice) { %>
 			<li> bravo <%= flash.notice %> </li>
 		<% } %>
-		<% if (login) { %>
-			<li> bonjour <%= login %> </li>
+
+		<% if (session.login) { %>
+			<li> bonjour <%= session.login %> </li>
 		<% } %>
         <div class="page_title">Bienvenue à Neverland !</div>
         <div class="container">

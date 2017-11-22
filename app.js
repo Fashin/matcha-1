@@ -91,7 +91,7 @@ app.get('/', function(req, res) {
 	tmp_flash = { error: flash.error, notice: flash.notice };
 	flash.error = null;
 	flash.notice = null;
-    res.render('index', { login: req.session.login, flash: tmp_flash });
+    res.render('index', { session: req.session, flash: tmp_flash });
 });
 
 // POST
