@@ -26,6 +26,5 @@ socket.on('user-login', function (loggedUser) {
  * Réception d'un message
  */
 socket.on('chat-message', function (message) {
-    $('#messages').append($('<li>').text(message.text));
+    $('#messages').append($('<li>').html('<span class="username">' + message.username + '</span> ' + message.text));
 });
-

@@ -40,7 +40,7 @@ app.set('view engine', 'ejs');
 
 app.get('/chat', function(req, res) {
 	console.log("GET /chat");
-    res.render('chat');
+    res.render('chat', { session: req.session });
 });
 
 app.get('/myprofile', function(req, res) {
@@ -163,6 +163,7 @@ io.on('connection', function (socket) {
      * Utilisateur connecté à la socket
      */
     var loggedUser;
+    var username = session.login;
 
     /**
      * Log de connexion et de déconnexion des utilisateurs
@@ -176,7 +177,9 @@ io.on('connection', function (socket) {
      * Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
      */
     socket.on('chat-message', function (message) {
+        message.username = loggedUser.username; // On intègre ici le nom d'utilisateur au message
         io.emit('chat-message', message);
+        console.log('Message de : ' + loggedUser.username);
     });
 });
 
