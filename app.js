@@ -41,14 +41,10 @@ app.set('view engine', 'ejs');
 
 app.get('/chat', function(req, res) {
 	console.log("GET /chat");
-<<<<<<< HEAD
 	tmp_flash = { error: flash.error, notice: flash.notice };
 	flash.error = null;
 	flash.notice = null;
     res.render('chat', { session: req.session, flash: tmp_flash });
-=======
-    res.render('chat', { session: req.session });
->>>>>>> master
 });
 
 app.get('/myprofile', function(req, res) {
@@ -185,6 +181,7 @@ app.use(function(req, res, next){
   }
   // default to plain-text. send()
   res.type('txt').send('Not found');
+});
 
 // Création d'un nouveau serveur
 var server = http.createServer(app);
