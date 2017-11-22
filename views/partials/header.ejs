@@ -4,7 +4,12 @@
         <ul class="left hide-on-med-and-down">
             <li><a href="/users">Profils</a></li>
             <li><a href="/chat">Chat</a></li>
-            <li class="active"><a href="/connection">Connexion</a></li>
+			<% if (session.login) { %>
+				<li class="active"><a href="/deconnection">Deconnexion</a></li>
+				<li> bonjour <%= session.login %> </li>
+			<% } else {%>
+				<li class="active"><a href="/connection">Connexion</a></li>
+			<% } %>
         </ul>
     </div>
 </nav>

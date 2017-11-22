@@ -40,12 +40,18 @@ app.set('view engine', 'ejs');
 
 app.get('/chat', function(req, res) {
 	console.log("GET /chat");
-    res.render('chat');
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
+    res.render('chat', { session: req.session, flash: tmp_flash });
 });
 
 app.get('/myprofile', function(req, res) {
 	console.log("GET /myprofile");
-    res.render("myprofile");
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
+    res.render("myprofile", { session: req.session, flash: tmp_flash });
 });
 
 app.get('/register', function(req, res) {
@@ -53,15 +59,18 @@ app.get('/register', function(req, res) {
 	tmp_flash = { error: flash.error, notice: flash.notice };
 	flash.error = null;
 	flash.notice = null;
-    res.render('register', { login: req.session.login, flash: tmp_flash });
+    res.render('register', { session: req.session, flash: tmp_flash });
 });
 
 app.get('/users', function(req, res) {
 	console.log("GET /users");
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
     connection.query('SELECT * FROM users', function (err, result, fields) {
         if (err) throw err;
         targets = result;
-        res.render('users', { users: targets });
+        res.render('users', { users: targets, session: req.session, flash: tmp_flash });
         console.log(targets);
     });
 });
@@ -71,18 +80,26 @@ app.get('/connection', function(req, res) {
 	tmp_flash = { error: flash.error, notice: flash.notice };
 	flash.error = null;
 	flash.notice = null;
-    res.render('connection', { login: req.session.login, flash: tmp_flash });
+    res.render('connection', { session: req.session, flash: tmp_flash });
+});
+
+app.get('/deconnection', function(req, res) {
+	console.log("GET /deconnection");
+	req.session.destroy(function(err) {
+    	res.redirect('/');
+	})
 });
 
 app.get('/users/:login', function(req, res) {
 	console.log("GET /users/:login");
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
     connection.query('SELECT * FROM users WHERE login = ?', req.params.login, function (err, result, fields) {
         if (err) throw err;
         targets = result;
-        res.render('users-profile', { users: targets });
+        res.render('users-profile', { users: targets, session: req.session, flash: tmp_flash });
 		console.log(targets);
-    	flash.error = null;
-		flash.notice = null;
     });
 });
 
