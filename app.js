@@ -65,6 +65,10 @@ app.get('/myprofile', function(req, res) {
 	tmp_flash = { error: flash.error, notice: flash.notice };
 	flash.error = null;
 	flash.notice = null;
+	if (req.session.login == undefined) {
+		flash.error = "vous devez vous connecter";
+		return(res.redirect('/connection'));
+	}
     connection.query('SELECT * FROM users WHERE login = ?', req.session.login, function (err, result, fields) {
         if (err) throw err;
         targets = result;
