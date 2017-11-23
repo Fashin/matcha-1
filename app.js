@@ -199,11 +199,12 @@ app.post('/update', function(req, res) {
         if (error) throw error;
         console.log(results);
         if (results.affectedRows == 1) {
-            req.session.login = User.login;
-            res.status(201).send("Profil mis à jour");
+            flash.notice = "Profil mis à jour";
+            return (res.redirect('/myprofile'));
         }
         else
-            res.status(500).send("Nous n'avons pas pu modifier vos informations, ce n'est pas vous c'est nous, nous sommes désolés :(");
+            flash.error = "Nous n'avons pas pu modifier vos informations, ce n'est pas vous c'est nous, nous sommes désolés :(";
+        	return (res.redirect('/myprofile'));
     });
 });
 
