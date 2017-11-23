@@ -50,7 +50,11 @@ app.get('/myprofile', function(req, res) {
 	tmp_flash = { error: flash.error, notice: flash.notice };
 	flash.error = null;
 	flash.notice = null;
-    res.render("myprofile", { session: req.session, flash: tmp_flash });
+    connection.query('SELECT * FROM users WHERE login = ?', req.session.login, function (err, result, fields) {
+        if (err) throw err;
+        targets = result;
+        res.render('myprofile', { users: targets, session: req.session, flash: tmp_flash });
+    });
 });
 
 app.get('/register', function(req, res) {
@@ -59,6 +63,13 @@ app.get('/register', function(req, res) {
 	flash.error = null;
 	flash.notice = null;
     res.render('register', { session: req.session, flash: tmp_flash });
+});
+
+app.get('/update', function(req, res) {
+    tmp_flash = { error: flash.error, notice: flash.notice };
+    flash.error = null;
+    flash.notice = null;
+    res.render('update', { session: req.session, flash: tmp_flash });
 });
 
 app.get('/forgot_pass', function(req, res) {
@@ -141,6 +152,32 @@ app.post('/register', function(req, res) {
         }
         else
             res.status(500).send("Nous n'avons pas pu vous inscrire, ce n'est pas vous c'est nous, nous sommes désolés :(");
+    });
+});
+
+app.post('/update', function(req, res) {
+    console.log("POST /update");
+    const User = {
+        login: req.body.login,
+        password: req.body.password,
+        name: req.body.user_name,
+        first_name: req.body.user_fname,
+        age: req.body.user_age,
+        gender: req.body.user_gender,
+        preferences: req.body.user_pref,
+        bio: req.body.user_bio,
+        interests: req.body.user_tags,
+        mail: req.body.mail
+    };
+    connection.query('UPDATE users SET ?', User, function (error, results, fields) {
+        if (error) throw error;
+        console.log(results);
+        if (results.affectedRows == 1) {
+            req.session.login = User.login;
+            res.status(201).send("Profil mis à jour");
+        }
+        else
+            res.status(500).send("Nous n'avons pas pu modifier vos informations, ce n'est pas vous c'est nous, nous sommes désolés :(");
     });
 });
 

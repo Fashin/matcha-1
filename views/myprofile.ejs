@@ -12,22 +12,45 @@
     <body>
         <% include ./partials/header.ejs %>
 
-        <h1>Mon profil</h1>
+        <div class="page_title">Mon profil</div>
 
-        <div class="row">
-            <div class="file-field input-field">
-                <div class="btn">
-                    <span>Photos</span>
-					<div id="prev"></div>
-                    <input id="file" type="file" multiple>
+        <div class="container">
+            <% for(user of users){ %>
+                <div class="row">
+                    <div class="col s12 m7">
+                        <div class="card">
+                            <div class="card-image">
+                                <img id="profile_pic" src="/img/pic_dorian.jpg">
+                                <span class="card-title"><%= user.login %></span>
+                            </div>
+                            <div class="file-field input-field">
+                                <div class="btn">
+                                    <span>Photos</span>
+                                    <div id="prev"></div>
+                                    <input id="file" type="file" multiple>
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input name="user_pics" id="user_pics" class="file-path validate" type="text" placeholder="Upload one or more files">
+                                </div>
+                                <div id="send" class="btn" style="float:right;">
+                                    <span>Envoyer</span>
+                                </div>
+                            </div>
+                            <div class="card-content">
+                                <div><%= user.first_name %> <%= user.name %> aka <%= user.login %>, <%= user.age %> ans</div>
+                                <div>À propos de moi :
+                                    <p><%= user.gender %> <%= user.preferences %></p>
+                                </div>
+                                <p><%= user.bio %></p>
+                                <p>Centres d'intérêts : <%= user.interests %></p>
+                            </div>
+                            <div class="card-action">
+                                <a href="../update">Modifier mon profil</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="file-path-wrapper">
-                    <input name="user_pics" id="user_pics" class="file-path validate" type="text" placeholder="Upload one or more files">
-                </div>
-				<div id="send" class="btn" style="float:right;">
-                    <span>Envoyer</span>
-                </div>
-            </div>
+            <% }%>
         </div>
 
         <% include ./partials/footer.ejs %>
