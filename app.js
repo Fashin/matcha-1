@@ -225,46 +225,38 @@ app.post('/connection', function(req, res) {
 
 app.post('/forgot_pass', function(req, res) {
 	console.log("POST /forgot_pass");
-	var mailOptions = {
-	  from: 'neverlandMatcha@gmail.com',
-	  to: 'hugo.massonnet@gmail.com',
-	  subject: 'mot de passe oublié',
-	  text: 'test'
-	};
-	transporter.sendMail(mailOptions, function(error, info){
-		if (error) {
-			console.log(error);
+    var User = {
+		login: req.body.user_login,
+        mail: req.body.mail
+    };
+	connection.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
+		if (error) throw error;
+		if (results[0] && results[0].login) {
+			if (results[0].mail == User.mail) {
+				var mailOptions = {
+				  from: 'neverlandMatcha@gmail.com',
+				  to: User.mail,
+				  subject: 'mot de passe oublié',
+				  text: 'votre mot de passe est ' + results[0].password
+				};
+				transporter.sendMail(mailOptions, function(error, info){
+				  if (error) {
+				    console.log(error);
+				  } else {
+				    console.log('Email sent: ' + info.response);
+				  }
+				});
+				flash.notice = "le mail est bien evoyé a " + User.mail;
+				return (res.redirect('/connection'));
+			} else {
+				flash.error = "mauvais mail";
+				return (res.redirect("/forgot_pass"));
+			}
 		} else {
-			console.log('Email sent: ' + info.response);
+			flash.error = "mauvais login";
+			return (res.redirect("/forgot_pass"));
 		}
 	});
-
-    // var User = {
-	// 	login: req.body.user_login,
-    //     password: req.body.mail
-    // };
-	// connection.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
-	// 	if (error) throw error;
-	// 	if (results[0] && results[0].login) {
-	// 		if (results[0].mail == User.mail) {
-	// 			transporter.sendMail(mailOptions, function(error, info){
-	// 			  if (error) {
-	// 			    console.log(error);
-	// 			  } else {
-	// 			    console.log('Email sent: ' + info.response);
-	// 			  }
-	// 			});
-	// 			flash.notice = "le mail est bien evoyé a " + User.mail;
-	// 			return (res.redirect('/connection'));
-	// 		} else {
-	// 			flash.error = "mauvais mail";
-	// 			return (res.redirect("/forgot_pass"));
-	// 		}
-	// 	} else {
-	// 		flash.error = "mauvais login";
-	// 		return (res.redirect("/forgot_pass"));
-	// 	}
-	// });
 });
 
 app.use(function(req, res, next) {
