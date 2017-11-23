@@ -42,7 +42,7 @@ connect.query("CREATE TABLE `users` ( \
 
 
 connect.query("INSERT INTO `users` (`id`, `mail`, `login`, `password`, `name`, `first_name`, `age`, `gender`, `preferences`, `bio`, `interests`, `photos`) VALUES \
-(1, 'hmassonn@student.42.fr', 'Dam', 'lol', 'Christophe', 'Damien', 25, 'M', 'F', 'I m a good developer', 'funny dogs', 'N/A'), \
+(1, 'ogre181@hotmail.com', 'Dam', 'lol', 'Christophe', 'Damien', 25, 'M', 'F', 'I m a good developer', 'funny dogs', 'N/A'), \
 (2, 'mjeannin@student.42.fr', 'Marine', 'lol', 'Jeannin', 'Marine', 22, 'F', 'MF', 'I m a great journalist :)', 'news', 'N/A'), \
 (3, 'hmassonn@student.42.fr', 'Roberto Carlos', 'lol', 'Robert', 'Ophélie', 23, 'F', 'M', 'je bosse à Renault', 'handball', 'N/A');");
 

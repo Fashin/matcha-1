@@ -237,7 +237,7 @@ app.post('/forgot_pass', function(req, res) {
 				  from: 'neverlandMatcha@gmail.com',
 				  to: User.mail,
 				  subject: 'mot de passe oublié',
-				  text: 'votre mot de passe est ' + results[0].password
+				  text: 'votre mot de passe est: ' + results[0].password
 				};
 				transporter.sendMail(mailOptions, function(error, info){
 				  if (error) {
