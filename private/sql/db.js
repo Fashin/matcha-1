@@ -35,7 +35,7 @@ connect.query("CREATE TABLE `users` ( \
   `preferences` varchar(255) NOT NULL, \
   `bio` varchar(255) NOT NULL, \
   `interests` varchar(255) NOT NULL, \
-  `photos` longtext NOT NULL, \
+  `photos` longtext DEFAULT NULL, \
   PRIMARY KEY (`id`) \
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
