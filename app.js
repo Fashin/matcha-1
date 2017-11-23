@@ -5,6 +5,7 @@ const http = require('http');
 const path = require('path');
 const mysql = require('mysql');
 var session = require("express-session");
+var MemoryStore = require('session-memory-store')(session);
 var nodemailer = require('nodemailer');
 
 var transporter = nodemailer.createTransport({
@@ -37,14 +38,20 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
 	secret: 'keyboard cat',
-	cookie: {
-		maxAge: 1000*60*60,
-		expires: new Date(Date.now() + 1000*60*60)
-	},
-	rolling: true,
+	store: new MemoryStore(),
+	expires: new Date(Date.now() + 1000*60*60),
 	resave: true,
 	saveUninitialized: true
 }));
+
+
+// var Session = require('express-session');
+// var SessionStore = require('session-file-store')(Session);
+// var session = Session({
+// 	store: new SessionStore({path: __dirname+'/tmp/sessions'}),
+// 	secret: 'pass',
+// 	resave: true,
+// 	saveUninitialized: true});
 
 // SET
 
