@@ -11,12 +11,6 @@
 
     <body>
         <% include ./partials/header.ejs %>
-		<% if (flash.error) { %>
-			<li> oh non nous avons cette erreur <%= flash.error %> </li>
-		<% } %>
-		<% if (flash.notice) { %>
-			<li> bravo <%= flash.notice %> </li>
-		<% } %>
         <div class="page_title">Mot de pass oublié</div>
         <div class="row" id="mail-pass-form">
             <form class="col s12" action="/forgot_pass" method="post">

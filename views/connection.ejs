@@ -11,12 +11,6 @@
 
     <body>
         <% include ./partials/header.ejs %>
-		<% if (flash.error) { %>
-			<li> oh non nous avons cette erreur <%= flash.error %> </li>
-		<% } %>
-		<% if (flash.notice) { %>
-			<li> bravo <%= flash.notice %> </li>
-		<% } %>
         <div class="page_title">Connexion</div>
         <div class="row" id="register-form">
             <form class="col s12" id="register" action="/connection" method="post">

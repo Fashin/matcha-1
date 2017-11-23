@@ -13,3 +13,10 @@
         </ul>
     </div>
 </nav>
+
+<% if (flash.error) { %>
+	<div id="flash_error"> oh non nous avons cette erreur <%= flash.error %> </div>
+<% } %>
+<% if (flash.notice) { %>
+	<div id="flash_notice"> bravo <%= flash.notice %> </div>
+<% } %>

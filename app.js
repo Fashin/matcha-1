@@ -270,6 +270,23 @@ app.post('/forgot_pass', function(req, res) {
 	});
 });
 
+app.post('/picture', function(req, res) {
+	console.log("POST /picture");
+	    const User = {
+	        photos: req.body.picture,
+	    };
+	connection.query('UPDATE users SET ? WHERE login = ?', [User, req.session.login], function (error, results, fields) {
+        if (error) throw error;
+        console.log(results);
+        if (results.affectedRows == 1) {
+            req.session.login = User.login;
+            res.status(201).send("Profil mis à jour");
+        }
+        else
+            res.status(500).send("Nous n'avons pas pu modifier vos informations, ce n'est pas vous c'est nous, nous sommes désolés :(");
+    });
+});
+
 app.use(function(req, res, next) {
 	res.status(404);
 	if (req.accepts('html')) {

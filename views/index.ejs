@@ -12,12 +12,6 @@
     <body>
         <% include ./partials/header.ejs %>
 
-		<% if (flash.error) { %>
-			<li> oh non nous avons cette erreur <%= flash.error %> </li>
-		<% } %>
-		<% if (flash.notice) { %>
-			<li> bravo <%= flash.notice %> </li>
-		<% } %>
         <div class="page_title">Bienvenue à Neverland !</div>
         <div class="container">
             <p>Le 1er site pour les 1ères fois.</p>

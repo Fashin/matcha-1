@@ -20,17 +20,17 @@
                     <div class="col s12 m7">
                         <div class="card">
                             <div class="card-image">
-                                <img id="profile_pic" src="/img/pic_dorian.jpg">
+                                <img id="profile_pic" src="<%= user.photos %>">
                                 <span class="card-title"><%= user.login %></span>
                             </div>
                             <div class="file-field input-field">
                                 <div class="btn">
                                     <span>Photos</span>
                                     <div id="prev"></div>
-                                    <input id="file" type="file" multiple>
+                                    <input id="file" type="file">
                                 </div>
                                 <div class="file-path-wrapper">
-                                    <input name="user_pics" id="user_pics" class="file-path validate" type="text" placeholder="Upload one or more files">
+                                    <input name="user_pics" id="user_pics" class="file-path validate" type="text" placeholder="Upload one file">
                                 </div>
                                 <div id="send" class="btn" style="float:right;">
                                     <span>Envoyer</span>

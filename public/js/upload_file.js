@@ -25,11 +25,24 @@
             imgType = imgType[imgType.length - 1];
             if (allowedTypes.indexOf(imgType) != -1) {
                 createThumbnail(files[i]);
-            }
+            } else {
+				alert("formats acceptés: png, jpg, jpeg, gif");
+			}
         }
     });
 })();
 
 $(document).on("click", '#send', function(event) {
-	console.log($("#prev > img")[0].src);
+	if ($("#prev > img")[0] != undefined) {
+		var picture = $("#prev > img")[0].src;
+		$.ajax({
+			url: `/picture`,
+			data: { picture: picture },
+			dataType: "json",
+			type: 'POST',
+			success : function(e) {
+				location.reload();
+			}
+		});
+	}
 });
