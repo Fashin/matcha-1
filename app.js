@@ -5,11 +5,9 @@ const http = require('http');
 const path = require('path');
 const mysql = require('mysql');
 var session = require("express-session");
-var sharedsession = require("express-socket.io-session");
 
-var targets = [];
 var flash = { error: null, notice: null };
-
+var targets = []
 //SQL
 
 var connection = mysql.createConnection({
@@ -63,6 +61,14 @@ app.get('/register', function(req, res) {
     res.render('register', { session: req.session, flash: tmp_flash });
 });
 
+app.get('/forgot_pass', function(req, res) {
+	console.log("GET /forgot_pass");
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
+    res.render('forgot_pass', { session: req.session, flash: tmp_flash });
+});
+
 app.get('/users', function(req, res) {
 	console.log("GET /users");
 	tmp_flash = { error: flash.error, notice: flash.notice };
@@ -72,7 +78,6 @@ app.get('/users', function(req, res) {
         if (err) throw err;
         targets = result;
         res.render('users', { users: targets, session: req.session, flash: tmp_flash });
-        console.log(targets);
     });
 });
 
@@ -100,7 +105,6 @@ app.get('/users/:login', function(req, res) {
         if (err) throw err;
         targets = result;
         res.render('users-profile', { users: targets, session: req.session, flash: tmp_flash });
-		console.log(targets);
     });
 });
 
@@ -167,65 +171,96 @@ app.post('/connection', function(req, res) {
     });
 });
 
+app.post('/forgot_pass', function(req, res) {
+	console.log("POST /forgot_pass");
+    var User = {
+		login: req.body.user_login,
+        password: req.body.mail
+    };
+	connection.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
+		if (error) throw error;
+		if (results[0] && results[0].login) {
+			if (results[0].mail == User.mail) {
+				flash.notice = "le mail est bien evoyé a " + User.mail;
+				return (res.redirect('/connection'));
+			} else {
+				flash.error = "mauvais mail";
+				return (res.redirect("/forgot_pass"));
+			}
+		} else {
+			flash.error = "mauvais login";
+			return (res.redirect("/forgot_pass"));
+		}
+	});
+});
+
 app.use(function(req, res, next) {
 	res.status(404);
-	// respond with html page
 	if (req.accepts('html')) {
 		res.render('404', { url: req.url });
 		return;
 	}
-	// respond with json
 	if (req.accepts('json')) {
 		res.send({ error: 'Not found' });
 		return;
 	}
-	// default to plain-text. send()
 	res.type('txt').send('Not found');
 });
 
-// Création d'un nouveau serveur
+//	SOCKET
+
 var server = http.createServer(app);
+var ent = require('ent');
+var io = require('socket.io').listen(server);
 
-// Chargement de socket.io
-var io = require('socket.io')(server);
 
-// Partage de la session avec socket.io
-io.use(sharedsession(session, {
-    autoSave:true
-}));
-
-// Connexion, déconnexion, envoi de messages
-io.on('connection', function (socket) {
-
-    //Utilisateur connecté à la socket
-    var loggedUser;
-
-    // Accept a login event with user's data
-    socket.on("login", function(userdata) {
-        socket.handshake.session.userdata = userdata;
-        socket.handshake.session.save();
-    });
-    socket.on("logout", function(userdata) {
-        if (socket.handshake.session.userdata) {
-            delete socket.handshake.session.userdata;
-            socket.handshake.session.save();
-            socket.emit('left', userdata, Date.now());
-        }
+io.sockets.on('connection', function (socket, pseudo) {
+    // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on informe les autres personnes
+    socket.on('nouveau_client', function(pseudo) {
+        pseudo = ent.encode(pseudo);
+        socket.pseudo = pseudo;
+        socket.broadcast.emit('nouveau_client', pseudo);
     });
 
-    //Log de connexion et de déconnexion des utilisateurs
-    console.log('a user connected');
-    socket.on('disconnect', function () {
-        console.log('user disconected');
-    });
-
-    //Réception de l'événement 'chat-message' et réémission vers tous les utilisateurs
-    socket.on('chat-message', function (message) {
-        message.username = loggedUser.username; // On intègre ici le nom d'utilisateur au message
-        io.emit('chat-message', message);
-        console.log('Message de : ' + loggedUser.username);
+    // Dès qu'on reçoit un message, on récupère le pseudo de son auteur et on le transmet aux autres personnes
+    socket.on('message', function (message) {
+        message = ent.encode(message);
+        socket.broadcast.emit('message', {pseudo: socket.pseudo, message: message});
     });
 });
+
+// var io = require('socket.io')(server);
+// var sharedsession = require("express-socket.io-session");
+//
+// io.use(sharedsession(session, {
+//     autoSave:true
+// }));
+
+// io.on('connection', function (socket) {
+//
+//     socket.on("login", function(userdata) {
+//         socket.handshake.session.userdata = userdata;
+//         socket.handshake.session.save();
+//     });
+//     socket.on("logout", function(userdata) {
+//         if (socket.handshake.session.userdata) {
+//             delete socket.handshake.session.userdata;
+//             socket.handshake.session.save();
+//             socket.emit('left', userdata, Date.now());
+//         }
+//     });
+
+    // console.log('a user connected');
+    // socket.on('disconnect', function () {
+    //     console.log('user disconected');
+    // });
+
+    // socket.on('chat-message', function (message) {
+    //     message.username = loggedUser.username;
+    //     io.emit('chat-message', message);
+    //     console.log('Message de : ' + loggedUser.username);
+    // });
+// });
 
 // LISTEN
 

@@ -13,20 +13,21 @@
         <% include ./partials/header.ejs %>
         <div class="page_title">Chat</div>
 
-        <div class="chat_window">
-            <section id="chat">
-                <ul id="messages"></ul>
-                <form action="">
-                    <input id="m" autocomplete="off" /><button>Send</button>
-                </form>
-            </section>
-        </div>
+        <h1>Le super Chat temps réel !</h1>
 
-        <% include ./partials/footer.ejs %>
+        <form action="/" method="post" id="formulaire_chat">
+            <input type="text" name="message" id="message" placeholder="Votre message..." size="50" autofocus />
+            <input type="submit" id="envoi_message" value="Envoyer" />
+        </form>
+
+        <section id="zone_chat"></section>
+
 
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script src="/js/socket.io.js"></script>
+		<script src="/js/socket.io.js"></script>
         <script src="/js/client.js"></script>
+
+        <% include ./partials/footer.ejs %>
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="/js/materialize.min.js"></script>
     </body>

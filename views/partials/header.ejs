@@ -5,7 +5,7 @@
             <li><a href="/users">Profils</a></li>
             <li><a href="/chat">Chat</a></li>
 			<% if (session.login) { %>
-				<li class="active"><a href="/deconnection">Deconnexion</a></li>
+				<li><a href="/deconnection">Deconnexion</a></li>
 				<li><a href="/myprofile"><%= session.login %></a></li>
 			<% } else {%>
 				<li class="active"><a href="/connection">Connexion</a></li>
