@@ -25,7 +25,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
 	secret: 'keyboard cat',
-	cookie: { maxAge: 1000*60*60, expires: new Date(Date.now() + 1000*60*60) },
+	cookie: {
+		maxAge: 1000*60*60,
+		expires: new Date(Date.now() + 1000*60*60)
+	},
+	rolling: true,
 	resave: true,
 	saveUninitialized: true
 }));
