@@ -7,6 +7,7 @@ var connection = mysql.createConnection({
 });
 connection.connect();
 
+connect.query("DROP DATABASE IF EXISTS matcha;");
 connection.query("CREATE DATABASE matcha;");
 
 connection.end();
