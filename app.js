@@ -7,7 +7,8 @@ const mysql = require('mysql');
 var session = require("express-session");
 
 var flash = { error: null, notice: null };
-var targets = []
+var targets = [];
+
 //SQL
 
 var connection = mysql.createConnection({
@@ -162,8 +163,6 @@ app.post('/register', function(req, res) {
 app.post('/update', function(req, res) {
     console.log("POST /update");
     const User = {
-        login: req.body.login,
-        password: req.body.password,
         name: req.body.user_name,
         first_name: req.body.user_fname,
         age: req.body.user_age,
