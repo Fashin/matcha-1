@@ -2,7 +2,7 @@
 <html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <title>Connexion</title>
+        <title>Mot de pass oublié</title>
         <link rel="stylesheet" href="/css/styles.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
@@ -17,29 +17,25 @@
 		<% if (flash.notice) { %>
 			<li> bravo <%= flash.notice %> </li>
 		<% } %>
-        <div class="page_title">Connexion</div>
-        <div class="row" id="register-form">
-            <form class="col s12" id="register" action="/connection" method="post">
+        <div class="page_title">Mot de pass oublié</div>
+        <div class="row" id="mail-pass-form">
+            <form class="col s12" action="/forgot_pass" method="post">
                 <div class="row">
                     <div class="input-field col s12">
                         <label for="user_name">Login</label>
                         <input type="text" name="user_login" id="user_login">
                     </div>
                     <div class="input-field col s12">
-                        <label for="password">Mot de passe</label>
-                        <input type="password" name="password" id="password">
+                        <label for="mail">mail</label>
+                        <input type="text" name="mail" id="mail">
                     </div>
                 </div>
-                <div class="row" id="connection-button">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">Se connecter
+                <div class="row" id="mail-button">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">envoyer le mail
                         <i class="material-icons right">send</i>
                     </button>
                 </div>
             </form>
-	        <a href="http://localhost:3001/register">S'inscrire</a>
-			</br>
-			</br>
-	        <a href="http://localhost:3001/forgot_pass">j'ai oublier mon mot de passe</a>
 		</div>
 
         <% include ./partials/footer.ejs %>

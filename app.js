@@ -7,7 +7,7 @@ const mysql = require('mysql');
 var session = require("express-session");
 
 var flash = { error: null, notice: null };
-
+var targets = []
 //SQL
 
 var connection = mysql.createConnection({
@@ -61,6 +61,14 @@ app.get('/register', function(req, res) {
     res.render('register', { session: req.session, flash: tmp_flash });
 });
 
+app.get('/forgot_pass', function(req, res) {
+	console.log("GET /forgot_pass");
+	tmp_flash = { error: flash.error, notice: flash.notice };
+	flash.error = null;
+	flash.notice = null;
+    res.render('forgot_pass', { session: req.session, flash: tmp_flash });
+});
+
 app.get('/users', function(req, res) {
 	console.log("GET /users");
 	tmp_flash = { error: flash.error, notice: flash.notice };
@@ -70,7 +78,6 @@ app.get('/users', function(req, res) {
         if (err) throw err;
         targets = result;
         res.render('users', { users: targets, session: req.session, flash: tmp_flash });
-        console.log(targets);
     });
 });
 
@@ -98,7 +105,6 @@ app.get('/users/:login', function(req, res) {
         if (err) throw err;
         targets = result;
         res.render('users-profile', { users: targets, session: req.session, flash: tmp_flash });
-		console.log(targets);
     });
 });
 
@@ -163,6 +169,29 @@ app.post('/connection', function(req, res) {
 			return (res.redirect("/connection"));
 		}
     });
+});
+
+app.post('/forgot_pass', function(req, res) {
+	console.log("POST /forgot_pass");
+    var User = {
+		login: req.body.user_login,
+        password: req.body.mail
+    };
+	connection.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
+		if (error) throw error;
+		if (results[0] && results[0].login) {
+			if (results[0].mail == User.mail) {
+				flash.notice = "le mail est bien evoyé a " + User.mail;
+				return (res.redirect('/connection'));
+			} else {
+				flash.error = "mauvais mail";
+				return (res.redirect("/forgot_pass"));
+			}
+		} else {
+			flash.error = "mauvais login";
+			return (res.redirect("/forgot_pass"));
+		}
+	});
 });
 
 app.use(function(req, res, next) {
