@@ -27,12 +27,14 @@ router.post('/', function(req, res) {
     database.query('INSERT INTO users SET ?', newUser, function (error, results, fields) {
         if (error) throw error;
 		console.log(results);
-        if (results.affectedRows == 1) {
+        if (results != undefined && results.affectedRows == 1) {
             req.session.login = newUser.login;
-            res.status(201).send("Vous êtes bien enregistré");
-        }
-        else
-            res.status(500).send("Nous n'avons pas pu vous inscrire, ce n'est pas vous c'est nous, nous sommes désolés :(");
+			req.flash('notice', "Vous êtes bien enregistré" );
+            res.redirect("/");
+        } else {
+			req.flash('error', "Nous n'avons pas pu vous inscrire, ce n'est pas vous c'est nous, nous sommes désolés :(" );
+			res.redirect("/");
+		}
     });
 });
 
