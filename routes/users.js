@@ -18,6 +18,10 @@ router.get('/', function(req, res, next) {
 router.get('/:login', function(req, res) {
 	console.log("GET /users/:login");
 	targets = [];
+	if (req.session.login == undefined) {
+		flash.error = "vous devez vous connecter";
+		return(res.redirect('/connection'));
+	}
     database.query('SELECT * FROM users WHERE login = ?', req.params.login, function (err, result, fields) {
         if (err) throw err;
         targets = result;
