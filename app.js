@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // 	resave: true,
 // 	saveUninitialized: true
 // }));
-app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
+app.use(session({secret: 'max', saveUninitialized: false, resave: false}));
 app.use(flash());
 
 

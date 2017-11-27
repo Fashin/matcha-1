@@ -6,7 +6,7 @@ const router 	= express.Router();
 /* GET /connection */
 router.get('/', function(req, res, next) {
 	console.log("GET /chat");
-	res.render('chat', { session: req.session, flash: flash });
+	res.render('chat', { session: req.session, flash: req.flash });
 });
 
 module.exports = router;

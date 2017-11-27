@@ -7,7 +7,7 @@ const router 	= express.Router();
 /* GET /connection */
 router.get('/', function(req, res, next) {
 	console.log("GET /connection");
-	res.render('connection', { session: req.session, flash: flash });
+	res.render('connection', { session: req.session, flash: req.flash });
 });
 
 router.post('/', function(req, res) {

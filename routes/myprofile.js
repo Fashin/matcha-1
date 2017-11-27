@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
     database.query('SELECT * FROM users WHERE login = ?', req.session.login, function (err, result, fields) {
         if (err) throw err;
         targets = result;
-        res.render('myprofile', { users: targets, session: req.session, flash: flash });
+        res.render('myprofile', { users: targets, session: req.session, flash: req.flash });
     });
 });
 
