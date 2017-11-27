@@ -13,6 +13,7 @@ router.post('/', function(req, res) {
         if (error) throw error;
         console.log(results);
         if (results.affectedRows == 1) {
+			req.flash('notice', "l'image a bien ete upload" );
             req.session.login = User.login;
             res.status(201).send("Profil mis à jour");
         }

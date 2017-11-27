@@ -1,24 +1,5 @@
-const mysql = require('mysql');
-var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'qwerty',
-    port     : 3306
-});
-connection.connect();
+const connect	= require('../../model/database');
 
-connection.query("DROP DATABASE IF EXISTS matcha;");
-connection.query("CREATE DATABASE matcha;");
-
-connection.end();
-
-var connect = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'qwerty',
-    database : 'matcha',
-    port     : 3306
-});
 connect.connect();
 
 connect.query("DROP TABLE IF EXISTS users;");
