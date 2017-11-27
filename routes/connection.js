@@ -20,7 +20,7 @@ router.post('/', function(req, res) {
         if (error) throw error;
 		if (results[0] && results[0].login) {
 			if (results[0].password == User.password) {
-				flash.notice = "bienvenu " + User.login;
+				req.flash("notice", "bienvenu " + User.login);
 				req.session.login = User.login;
 				req.session.save(function(err) {
 					if (err) return next(err);

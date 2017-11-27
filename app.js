@@ -2,32 +2,13 @@ const express		= require('express');
 const bodyParser	= require('body-parser');
 const http			= require('http');
 const path			= require('path');
-const mysql			= require('mysql');
+const database		= require('./model/database');
 const flash			= require('express-flash');
 const session		= require("express-session");
 const MemoryStore	= require('session-memory-store')(session);
-const nodemailer	= require('nodemailer');
 const app			= express();
 
-var transporter = nodemailer.createTransport({
-	host: 'smtp.gmail.com',
-	port: 465,
-	secure: true,
-	auth: {
-	  user: 'neverlandmatcha@gmail.com',
-	  pass: 'matcha42'
-	}
-});
-
 //SQL
-
-var database = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'qwerty',
-    database : 'matcha',
-    port     : 3306
-});
 
 const connection	= require('./routes/connection');
 const deconnection	= require('./routes/deconnection');
@@ -45,13 +26,14 @@ const index			= require('./routes/index');
 app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({
-	secret: 'keyboard cat',
-	store: new MemoryStore(),
-	expires: new Date(Date.now() + 1000*60*60),
-	resave: true,
-	saveUninitialized: true
-}));
+// app.use(session({
+// 	secret: 'keyboard cat',
+// 	store: new MemoryStore(),
+// 	expires: new Date(Date.now() + 1000*60*60),
+// 	resave: true,
+// 	saveUninitialized: true
+// }));
+app.use(expressSession({secret: 'max', saveUninitialized: false, resave: false}));
 app.use(flash());
 
 

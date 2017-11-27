@@ -2,6 +2,7 @@ const express	= require('express');
 const session	= require("express-session");
 const flash		= require('express-flash');
 const database	= require('../model/database');
+const mailing	= require('../model/mailing');
 const router 	= express.Router();
 
 /* GET /connection */
@@ -26,7 +27,7 @@ router.post('/', function(req, res) {
 				  subject: 'mot de passe oublié',
 				  text: 'votre mot de passe est: ' + results[0].password
 				};
-				transporter.sendMail(mailOptions, function(error, info){
+				mailing.sendMail(mailOptions, function(error, info){
 				  if (error) {
 				    console.log(error);
 				  } else {
