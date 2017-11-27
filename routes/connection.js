@@ -1,8 +1,8 @@
 const express	= require('express');
 const session	= require("express-session");
 const flash		= require('express-flash');
-const database	= require('../model/database');
 const router 	= express.Router();
+var database	= require('../model/database');
 
 /* GET /connection */
 router.get('/', function(req, res, next) {
@@ -17,7 +17,7 @@ router.post('/', function(req, res) {
         password: req.body.password
     };
     database.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
-        if (error) throw error;
+    if (error) throw error;
 		if (results[0] && results[0].login) {
 			if (results[0].password == User.password) {
 				req.flash("notice", "bienvenu " + User.login);
