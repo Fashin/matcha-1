@@ -1,12 +1,13 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const http = require('http');
-const path = require('path');
-const mysql = require('mysql');
-var session = require("express-session");
-var MemoryStore = require('session-memory-store')(session);
-var nodemailer = require('nodemailer');
+const express		= require('express');
+const bodyParser	= require('body-parser');
+const http			= require('http');
+const path			= require('path');
+const mysql			= require('mysql');
+const flash			= require('express-flash');
+const session		= require("express-session");
+const MemoryStore	= require('session-memory-store')(session);
+const nodemailer	= require('nodemailer');
+const app			= express();
 
 var transporter = nodemailer.createTransport({
 	host: 'smtp.gmail.com',
@@ -18,18 +19,25 @@ var transporter = nodemailer.createTransport({
 	}
 });
 
-var flash = { error: null, notice: null };
-var targets = [];
-
 //SQL
 
-var connection = mysql.createConnection({
+var database = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : 'qwerty',
     database : 'matcha',
     port     : 3306
 });
+
+const connection	= require('./routes/connection');
+const deconnection	= require('./routes/deconnection');
+const chat			= require('./routes/chat');
+const myprofile		= require('./routes/myprofile');
+const register		= require('./routes/register');
+const update		= require('./routes/update');
+const forgot_pass	= require('./routes/forgot_pass');
+const users			= require('./routes/users');
+const index			= require('./routes/index');
 
 // USE
 
@@ -43,7 +51,18 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+app.use(flash());
 
+
+app.use('/connection', connection);
+app.use('/deconnection', deconnection);
+app.use('/chat', chat);
+app.use('/myprofile', myprofile);
+app.use('/register', register);
+app.use('/update', update);
+app.use('/forgot_pass', forgot_pass);
+app.use('/users', users);
+app.use('/', index);
 
 // var Session = require('express-session');
 // var SessionStore = require('session-file-store')(Session);
@@ -58,100 +77,14 @@ app.use(session({
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
-// GET
-
-app.get('/chat', function(req, res) {
-	console.log("GET /chat");
-	tmp_flash = { error: flash.error, notice: flash.notice };
-	flash.error = null;
-	flash.notice = null;
-    res.render('chat', { session: req.session, flash: tmp_flash });
-});
-
-app.get('/myprofile', function(req, res) {
-	console.log("GET /myprofile");
-	tmp_flash = { error: flash.error, notice: flash.notice };
-	flash.error = null;
-	flash.notice = null;
-	if (req.session.login == undefined) {
-		flash.error = "vous devez vous connecter";
-		return(res.redirect('/connection'));
-	}
-    connection.query('SELECT * FROM users WHERE login = ?', req.session.login, function (err, result, fields) {
-        if (err) throw err;
-        targets = result;
-        res.render('myprofile', { users: targets, session: req.session, flash: tmp_flash });
-    });
-});
-
-app.get('/register', function(req, res) {
-	console.log("GET /register");
-	tmp_flash = { error: flash.error, notice: flash.notice };
-	flash.error = null;
-	flash.notice = null;
-    res.render('register', { session: req.session, flash: tmp_flash });
-});
-
-app.get('/update', function(req, res) {
-    tmp_flash = { error: flash.error, notice: flash.notice };
-    flash.error = null;
-    flash.notice = null;
-    res.render('update', { session: req.session, flash: tmp_flash });
-});
-
-app.get('/forgot_pass', function(req, res) {
-	console.log("GET /forgot_pass");
-	tmp_flash = { error: flash.error, notice: flash.notice };
-	flash.error = null;
-	flash.notice = null;
-    res.render('forgot_pass', { session: req.session, flash: tmp_flash });
-});
-
-app.get('/users', function(req, res) {
-	console.log("GET /users");
-	tmp_flash = { error: flash.error, notice: flash.notice };
-	flash.error = null;
-	flash.notice = null;
-    connection.query('SELECT * FROM users', function (err, result, fields) {
-        if (err) throw err;
-        targets = result;
-        res.render('users', { users: targets, session: req.session, flash: tmp_flash });
-    });
-});
-
-app.get('/connection', function(req, res) {
-	console.log("GET /connection");
-	tmp_flash = { error: flash.error, notice: flash.notice };
-	flash.error = null;
-	flash.notice = null;
-    res.render('connection', { session: req.session, flash: tmp_flash });
-});
-
-app.get('/deconnection', function(req, res) {
-	console.log("GET /deconnection");
-	req.session.destroy(function(err) {
-    	res.redirect('/');
-	})
-});
-
 app.get('/users/:login', function(req, res) {
 	console.log("GET /users/:login");
-	tmp_flash = { error: flash.error, notice: flash.notice };
-	flash.error = null;
-	flash.notice = null;
-    connection.query('SELECT * FROM users WHERE login = ?', req.params.login, function (err, result, fields) {
+	targets = [];
+    database.query('SELECT * FROM users WHERE login = ?', req.params.login, function (err, result, fields) {
         if (err) throw err;
         targets = result;
-        res.render('users-profile', { users: targets, session: req.session, flash: tmp_flash });
+        res.render('users-profile', { users: targets, session: req.session, flash: flash });
     });
-});
-
-app.get('/', function(req, res) {
-	console.log("GET /index");
-	tmp_flash = { error: flash.error, notice: flash.notice };
-	flash.error = null;
-	flash.notice = null;
-    res.render('index', { session: req.session, flash: tmp_flash });
 });
 
 // POST
@@ -170,7 +103,7 @@ app.post('/register', function(req, res) {
         interests: req.body.user_tags,
         mail: req.body.mail
     };
-    connection.query('INSERT INTO users SET ?', newUser, function (error, results, fields) {
+    database.query('INSERT INTO users SET ?', newUser, function (error, results, fields) {
         if (error) throw error;
 		console.log(results);
         if (results.affectedRows == 1) {
@@ -195,7 +128,7 @@ app.post('/update', function(req, res) {
         interests: req.body.user_tags
     };
     console.log(User);
-    connection.query('UPDATE users SET ? WHERE login = ?', [User, req.session.login], function (error, results, fields) {
+    database.query('UPDATE users SET ? WHERE login = ?', [User, req.session.login], function (error, results, fields) {
         if (error) throw error;
         console.log(results);
         if (results.affectedRows == 1) {
@@ -214,7 +147,7 @@ app.post('/connection', function(req, res) {
 		login: req.body.user_login,
         password: req.body.password
     };
-    connection.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
+    database.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
         if (error) throw error;
 		if (results[0] && results[0].login) {
 			if (results[0].password == User.password) {
@@ -241,7 +174,7 @@ app.post('/forgot_pass', function(req, res) {
 		login: req.body.user_login,
         mail: req.body.mail
     };
-	connection.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
+	database.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
 		if (error) throw error;
 		if (results[0] && results[0].login) {
 			if (results[0].mail == User.mail) {
@@ -276,7 +209,7 @@ app.post('/picture', function(req, res) {
 	    const User = {
 	        photos: req.body.picture,
 	    };
-	connection.query('UPDATE users SET ? WHERE login = ?', [User, req.session.login], function (error, results, fields) {
+	database.query('UPDATE users SET ? WHERE login = ?', [User, req.session.login], function (error, results, fields) {
         if (error) throw error;
         console.log(results);
         if (results.affectedRows == 1) {
