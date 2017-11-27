@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
     database.query('SELECT * FROM users', function (err, result, fields) {
         if (err) throw err;
         targets = result;
-        req.('users', { users: targets, session: req.session, flash: req.flash });
+        res.render('users', { users: targets, session: req.session, flash: req.flash });
     });
 });
 
