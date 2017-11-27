@@ -37,6 +37,7 @@ const register		= require('./routes/register');
 const update		= require('./routes/update');
 const forgot_pass	= require('./routes/forgot_pass');
 const users			= require('./routes/users');
+const picture		= require('./routes/picture');
 const index			= require('./routes/index');
 
 // USE
@@ -63,6 +64,7 @@ app.use('/update', update);
 app.use('/forgot_pass', forgot_pass);
 app.use('/users', users);
 app.use('/', index);
+app.use('/picture', picture);
 
 // var Session = require('express-session');
 // var SessionStore = require('session-file-store')(Session);
@@ -77,149 +79,7 @@ app.use('/', index);
 app.set('views', './views');
 app.set('view engine', 'ejs');
 
-app.get('/users/:login', function(req, res) {
-	console.log("GET /users/:login");
-	targets = [];
-    database.query('SELECT * FROM users WHERE login = ?', req.params.login, function (err, result, fields) {
-        if (err) throw err;
-        targets = result;
-        res.render('users-profile', { users: targets, session: req.session, flash: flash });
-    });
-});
-
 // POST
-
-app.post('/register', function(req, res) {
-	console.log("POST /register");
-    const newUser = {
-		login: req.body.login,
-		password: req.body.password,
-        name: req.body.user_name,
-        first_name: req.body.user_fname,
-        age: req.body.user_age,
-        gender: req.body.user_gender,
-        preferences: req.body.user_pref,
-        bio: req.body.user_bio,
-        interests: req.body.user_tags,
-        mail: req.body.mail
-    };
-    database.query('INSERT INTO users SET ?', newUser, function (error, results, fields) {
-        if (error) throw error;
-		console.log(results);
-        if (results.affectedRows == 1) {
-            req.session.login = newUser.login;
-            res.status(201).send("Vous êtes bien enregistré");
-        }
-        else
-            res.status(500).send("Nous n'avons pas pu vous inscrire, ce n'est pas vous c'est nous, nous sommes désolés :(");
-    });
-});
-
-app.post('/update', function(req, res) {
-    console.log("POST /update");
-    const User = {
-        mail: req.body.mail,
-        name: req.body.user_name,
-        first_name: req.body.user_fname,
-        age: req.body.user_age,
-        gender: req.body.user_gender,
-        preferences: req.body.user_pref,
-        bio: req.body.user_bio,
-        interests: req.body.user_tags
-    };
-    console.log(User);
-    database.query('UPDATE users SET ? WHERE login = ?', [User, req.session.login], function (error, results, fields) {
-        if (error) throw error;
-        console.log(results);
-        if (results.affectedRows == 1) {
-            flash.notice = "Profil mis à jour";
-            return (res.redirect('/myprofile'));
-        }
-        else
-            flash.error = "Nous n'avons pas pu modifier vos informations, ce n'est pas vous c'est nous, nous sommes désolés :(";
-        	return (res.redirect('/myprofile'));
-    });
-});
-
-app.post('/connection', function(req, res) {
-	console.log("POST /connection");
-    var User = {
-		login: req.body.user_login,
-        password: req.body.password
-    };
-    database.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
-        if (error) throw error;
-		if (results[0] && results[0].login) {
-			if (results[0].password == User.password) {
-				flash.notice = "bienvenu " + User.login;
-				req.session.login = User.login;
-				req.session.save(function(err) {
-					if (err) return next(err);
-					return (res.redirect('/'));
-				});
-			} else {
-				flash.error = "mauvais mot de passe";
-				return (res.redirect("/connection"));
-			}
-		} else {
-			flash.error = "mauvais login";
-			return (res.redirect("/connection"));
-		}
-    });
-});
-
-app.post('/forgot_pass', function(req, res) {
-	console.log("POST /forgot_pass");
-    var User = {
-		login: req.body.user_login,
-        mail: req.body.mail
-    };
-	database.query('SELECT * FROM users WHERE login = ?', User.login, function (error, results, fields) {
-		if (error) throw error;
-		if (results[0] && results[0].login) {
-			if (results[0].mail == User.mail) {
-				var mailOptions = {
-				  from: 'neverlandMatcha@gmail.com',
-				  to: User.mail,
-				  subject: 'mot de passe oublié',
-				  text: 'votre mot de passe est: ' + results[0].password
-				};
-				transporter.sendMail(mailOptions, function(error, info){
-				  if (error) {
-				    console.log(error);
-				  } else {
-				    console.log('Email sent: ' + info.response);
-				  }
-				});
-				flash.notice = "le mail est bien evoyé a " + User.mail;
-				return (res.redirect('/connection'));
-			} else {
-				flash.error = "mauvais mail";
-				return (res.redirect("/forgot_pass"));
-			}
-		} else {
-			flash.error = "mauvais login";
-			return (res.redirect("/forgot_pass"));
-		}
-	});
-});
-
-app.post('/picture', function(req, res) {
-	console.log("POST /picture");
-	    const User = {
-	        photos: req.body.picture,
-	    };
-	database.query('UPDATE users SET ? WHERE login = ?', [User, req.session.login], function (error, results, fields) {
-        if (error) throw error;
-        console.log(results);
-        if (results.affectedRows == 1) {
-            req.session.login = User.login;
-            res.status(201).send("Profil mis à jour");
-        }
-        else
-            res.status(500).send("Nous n'avons pas pu modifier vos informations, ce n'est pas vous c'est nous, nous sommes désolés :(");
-    });
-});
 
 app.use(function(req, res, next) {
 	res.status(404);

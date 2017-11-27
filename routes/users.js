@@ -1,16 +1,8 @@
 const express	= require('express');
 const session	= require("express-session");
 const flash		= require('express-flash');
-const mysql		= require('mysql');
+const database	= require('../model/database');
 const router 	= express.Router();
-
-var database = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'qwerty',
-    database : 'matcha',
-    port     : 3306
-});
 
 /* GET /connection */
 router.get('/', function(req, res, next) {
@@ -20,6 +12,16 @@ router.get('/', function(req, res, next) {
         if (err) throw err;
         targets = result;
         res.render('users', { users: targets, session: req.session, flash: flash });
+    });
+});
+
+router.get('/:login', function(req, res) {
+	console.log("GET /users/:login");
+	targets = [];
+    database.query('SELECT * FROM users WHERE login = ?', req.params.login, function (err, result, fields) {
+        if (err) throw err;
+        targets = result;
+        res.render('users-profile', { users: targets, session: req.session, flash: flash });
     });
 });
 
